@@ -1,0 +1,81 @@
+doctype
+html
+    head
+        meta(charset='utf8')
+        title 블록체인 테스트
+        script(src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous")
+        link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.js')
+    body
+        div#sock 소켓통신
+        textarea#message(name="", cols="30", rows="10" )
+        button#send-data(name="send") 보내기
+        
+        //- #sample(style="display:none")
+        //-     .ui.inverted.segment
+        //-         .ui.inverted.accordion
+        //-             .title
+        //-                 i.dropdown.icon
+        //-                 |       INDEX
+        //-             .content
+        //-                 p(data-key="index").transition.hidden
+        //-                     | 
+        //-             .title
+        //-                 i.dropdown.icon
+        //-                 |       HASH
+        //-             .content
+        //-                 p(data-key="hash").transition.hidden
+        //-                     | 
+        //-             .title
+        //-                 i.dropdown.icon
+        //-                 |       PREVIOUS_HASH
+        //-             .content
+        //-                 p(data-key="previous_hash").transition.hidden
+        //-                     | 
+        //-             .title
+        //-                 i.dropdown.icon
+        //-                 |       TIMESTAMP
+        //-             .content
+        //-                 p(data-key="timstamp").transition.hidden
+        //-                     | 
+        //-             .title
+        //-                 i.dropdown.icon
+        //-                 |       DATA
+        //-             .content
+        //-                 p(data-key="data").transition.hidden
+        //-                     | 
+
+
+        script.
+            $(document).ready(function() {
+                var webSocket = new WebSocket("ws://localhost:3000");
+
+                webSocket.onopen = function() {
+                    console.log('서버와 웹 소켓 연결 성공!');
+                }
+                
+                webSocket.onmessage = function(event) {
+                    const data = JSON.parse(event.data);
+                    console.log(data);
+                }
+
+                //-     const clone = $("#sample").children().clone(true);
+
+            
+
+                //-     clone.find("p[data-key='index']").text(data.data.index);
+                //-     clone.find("p[data-key='hash']").text(data.data.hash);
+                //-     clone.find("p[data-key='previous_hash']").text(data.data.previousHash);
+                //-     clone.find("p[data-key='timstamp']").text(data.data.timestamp);
+                //-     clone.find("p[data-key='data']").text(data.data.data);
+                    
+                //-     clone.appendTo("body");
+                //- }
+                
+                //- $('.ui.accordion').accordion();
+                $("#send-data").click(function(){
+                    const message = $("#message").val();
+                    console.log(message);
+                    webSocket.send(JSON.stringify({func:"GET_NEWBLOCK", message:message}));
+                });
+            });
